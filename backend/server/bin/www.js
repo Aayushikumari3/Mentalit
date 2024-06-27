@@ -6,7 +6,7 @@ const path = require('path');
 
 mongoose.set('strictQuery', true) 
 // replace <dbuser> and <dbpassword> with your MongoDB Atlas database user credentials
-const uri = 'mongodb+srv://kashishahuja2002:kashish%40atlas15@mindwaves.xnruwfn.mongodb.net/?retryWrites=true&w=majority';
+const uri = 'mongodb+srv://Aayushi:jyO2swws2ybAq5GY@cluster0.9vhot9h.mongodb.net/';
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,

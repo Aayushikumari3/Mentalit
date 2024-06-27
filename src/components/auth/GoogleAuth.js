@@ -9,30 +9,45 @@ import { Button } from "@mui/material";
 import GoogleIcon from '../../assets/images/GoogleIcon.png';
 import { Auth } from "../../redux/Actions";
 
-const GoogleAuth = () => {
 
+
+
+
+<script src="https://apis.google.com/js/api.js"></script>
+
+
+
+
+
+
+
+
+const GoogleAuth = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const googleLogin = useGoogleLogin({
-        scope: "https://www.googleapis.com/auth/fitness.activity.read  https://www.googleapis.com/auth/fitness.heart_rate.read",
+        scope: "https://www.googleapis.com/auth/fitness.activity.read https://www.googleapis.com/auth/fitness.heart_rate.read",
         onSuccess: async (tokenResponse) => {
             console.log(tokenResponse);
             localStorage.setItem("authCode", tokenResponse.access_token);
             sessionStorage.setItem("isMySessionActive", true);
-            const userInfo = await axios.get(
-                'https://www.googleapis.com/oauth2/v3/userinfo',
-                { headers: { Authorization: `Bearer ${tokenResponse.access_token}` } },
-            );
-
-            dispatch(Auth("user/login", userInfo.data));
-            navigate('/pages/dashboard');
+            try {
+                const userInfo = await axios.get(
+                    'https://www.googleapis.com/oauth2/v3/userinfo',
+                    { headers: { Authorization: `Bearer ${tokenResponse.access_token}` } }
+                );
+                dispatch(Auth("user/login", userInfo.data));
+                navigate('/pages/dashboard');
+            } catch (error) {
+                console.error("Error fetching user info:", error);
+            }
         },
-        onError: errorResponse => console.log(errorResponse),
+        onError: errorResponse => console.error("Login error:", errorResponse),
     });
 
     return (
-        <Button className="authButton" onClick={googleLogin}>
+        <Button className="authButton" onClick={() => googleLogin()}>
             Sign in with Google &nbsp;
             <img src={GoogleIcon} alt="google logo" width="20px" />
         </Button>
